@@ -1,0 +1,31 @@
+name: Prospeccao Instagram
+
+on:
+  schedule:
+    - cron: "0 11 * * *"   # 11:00 UTC = 08:00 BRT (painel pronto antes das 10h)
+  workflow_dispatch: {}      # permite rodar manualmente pelo botao do GitHub
+
+permissions:
+  contents: write            # para commitar o painel e o estado de volta
+
+jobs:
+  rodar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Buscar e qualificar leads
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python main.py
+      - name: Commitar painel e estado
+        run: |
+          git config user.name "prospeccao-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add docs/ estado/
+          git diff --cached --quiet || git commit -m "Atualiza leads $(date -u +%Y-%m-%d)"
+          git push
