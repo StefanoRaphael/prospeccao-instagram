@@ -37,7 +37,10 @@ MAX_POR_NICHO = 5
 # O modo hashtag e cego para localizacao, entao filtramos por estes termos.
 REGIAO_TOKENS = [
     "taubate", "taubaté", "sao jose dos campos", "são josé dos campos", "sjc",
-    "tremembe", "tremembé", "pindamonhangaba", "pinda", "jacarei", "jacareí",
-    "cacapava", "caçapava", "vale do paraiba", "vale do paraíba", "redencao da serra",
-    "ubatuba", "caraguatatuba", "tatui", "guaratingueta", "guaratinguetá", "lorena",
+    "tremembe", "tremembé", "pindamonhangaba", "pinda",
+    "santo antonio do pinhal", "santo antônio do pinhal",
+    "campos do jordao", "campos do jordão", "campos de jordao", "campos de jordão",
+    "jacarei", "jacareí", "cacapava", "caçapava",
+    "vale do paraiba", "vale do paraíba", "redencao da serra",
+    "ubatuba", "caraguatatuba", "guaratingueta", "guaratinguetá", "lorena",
 ]
