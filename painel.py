@@ -9,6 +9,31 @@ DOCS = os.path.join(os.path.dirname(__file__), "docs")
 BR = timezone(timedelta(hours=-3))
 
 
+def _num(v):
+    """Converte campo do actor em numero (aceita '7813', 7813, '0.29%')."""
+    if isinstance(v, (int, float)):
+        return float(v)
+    try:
+        return float(str(v).replace("%", "").replace(",", ".").strip())
+    except (ValueError, AttributeError):
+        return 0.0
+
+
+def classifica_audiencia(item):
+    """Distingue audiencia real de suspeita (bot/comprada) pela coerencia dos
+    numeros absolutos, nao pelo ER sozinho. ER baixo + profissional real = alvo."""
+    seg = _num(item.get("Followers Count"))
+    likes = _num(item.get("Avg Likes"))
+    coment = _num(item.get("Avg Comments"))
+    views = _num(item.get("Median Views"))
+    if seg <= 0:
+        return "Audiência: indefinida"
+    taxa = (likes + coment) / seg
+    # Suspeita: conta grande com engajamento absoluto morto e quase sem comentario.
+    morta = taxa < 0.005 and coment < 3 and seg > 8000 and views < seg * 0.02
+    return "Audiência: suspeita" if morta else "Audiência: real"
+
+
 def _tel(item):
     tel = (item.get("Phone") or "").strip()
     if tel and tel != "N/A":
@@ -25,6 +50,8 @@ def _card(lead):
     tel = _tel(it)
     email = (it.get("Email") or "").strip()
     email = "" if email == "N/A" else email
+    aud = classifica_audiencia(it)
+    aud_cls = "ok" if aud.endswith("real") else ("bad" if aud.endswith("suspeita") else "")
     wa = f'<a class="btn wa" href="https://wa.me/{tel}" target="_blank">WhatsApp</a>' if tel else ""
     mail = (f'<a class="btn mail" href="mailto:{email}?subject={html.escape(q.get("email_assunto",""))}">E-mail</a>'
             if email else "")
@@ -47,7 +74,7 @@ def _card(lead):
       <div class="met">
         <span>{it.get('Followers Count','?')} seg.</span>
         <span>ER {it.get('Median ER','?')}</span>
-        <span>{html.escape(str(it.get('Quality','')))}</span>
+        <span class="aud {aud_cls}">{aud}</span>
         <span class="perna">{html.escape(str(q.get('perna','')))}</span>
       </div>
       <div class="motivo">{html.escape(str(q.get('motivo','')))}</div>
@@ -77,6 +104,7 @@ def gerar(leads, resumo):
  .nota{{font-size:26px;font-weight:700;color:#34a853}} .nota span{{font-size:13px;color:#9aa0a6}}
  .met{{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;font-size:12px;color:#bdc1c6}}
  .met span{{background:#23272c;padding:3px 8px;border-radius:6px}} .perna{{background:#3c2f1a !important;color:#f7c873}}
+ .aud.ok{{background:#16331f !important;color:#5bd17e}} .aud.bad{{background:#3a1a1a !important;color:#f08a8a}}
  .motivo{{font-size:13px;color:#cdd1d5;margin:8px 0;line-height:1.4}}
  .acoes{{display:flex;gap:8px;margin:10px 0}}
  .btn{{font-size:12px;padding:6px 12px;border-radius:6px;text-decoration:none;color:#fff}}
