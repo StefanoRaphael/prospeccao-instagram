@@ -30,6 +30,9 @@ def classifica_nicho(item):
 NICHOS = {
     "nutrologia": {
         "rotulo": "Nutrologia / Medicina Integrativa",
+        # Ancoras: leads bons ja encontrados. O Instagram traz contas similares
+        # (mesmo nicho, tendem a ser da mesma regiao). Sem hashtag.
+        "ancoras": ["dra.bruna.alfenas"],
         "hashtags": [
             "nutrologia", "nutrologo", "nutrologa", "medicinaintegrativa",
             "nutrologosjc", "nutrologiasjc", "nutrologasjc", "medicinaintegrativasjc",
@@ -46,6 +49,7 @@ NICHOS = {
     },
     "estetica": {
         "rotulo": "Clinicas de Estetica / Cirurgia Plastica",
+        "ancoras": ["dredgardcoutinhosjc", "vanessagomesclinic"],
         "hashtags": [
             "harmonizacaofacial", "esteticaavancada", "cirurgiaplastica",
             "preenchimento", "botox", "estetica",
@@ -62,6 +66,7 @@ NICHOS = {
     },
     "arquitetura": {
         "rotulo": "Arquitetura e Design de Interiores",
+        "ancoras": [],   # sem lead-ancora ainda; entra pela geolocalizacao
         "hashtags": [
             "arquitetura", "designdeinteriores", "interiores",
             "projetodeinteriores", "arquiteturadeinteriores",

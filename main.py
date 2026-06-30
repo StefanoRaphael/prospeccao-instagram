@@ -38,10 +38,11 @@ def main():
 
     for nome, nicho in nichos.NICHOS.items():
         print(f"Nicho: {nome}")
+        # Motor principal: contas similares as ancoras (sem hashtag).
         try:
-            itens = buscar.buscar_nicho(nome, nicho, vistos)
+            itens = buscar.buscar_similar(nome, nicho.get("ancoras", []), vistos)
         except Exception as e:
-            print(f"  erro na busca: {e}")
+            print(f"  erro na busca similar: {e}")
             resumo[nome] = 0
             continue
         novos = 0

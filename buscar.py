@@ -39,6 +39,39 @@ def buscar_nicho(nome, nicho, ja_vistos):
     return itens
 
 
+def buscar_similar(nome, ancoras, ja_vistos):
+    """Expansao de rede: a partir de contas-ancora, o Instagram traz as similares
+    (mesmo nicho, tendem a ser da mesma regiao). Sem hashtag."""
+    if not ancoras:
+        return []
+    url = API.format(actor=config.APIFY_ACTOR)
+    payload = {
+        "operationMode": "networkExpansion",
+        "startUsernames": ancoras,
+        "searchDepth": "1",
+        "maxCountExpansion": config.MAX_POR_NICHO,
+        "minFollowers": config.MIN_SEGUIDORES,
+        "maxFollowers": config.MAX_SEGUIDORES,
+        "analyzeQuality": True,
+        "extractEmail": True,
+        "extractPhoneNumber": True,
+        "extractWebsiteUrl": True,
+        "extractBusinessCategory": True,
+        "extractPosts": True,
+        "excludeAccounts": ja_vistos,
+    }
+    resp = requests.post(
+        url,
+        params={"token": config.APIFY_TOKEN, "timeout": 240, "memory": 512},
+        json=payload,
+        timeout=300,
+    )
+    resp.raise_for_status()
+    itens = resp.json()
+    print(f"  [{nome} similares] {len(itens)} perfis retornados")
+    return itens
+
+
 def buscar_localizacao(ja_vistos):
     """Segunda rede: perfis da regiao por geolocalizacao (independe de hashtag).
     No plano free traz ate 5 perfis aleatorios da regiao por rodada."""
