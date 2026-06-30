@@ -2,7 +2,8 @@ name: Prospeccao Instagram
 
 on:
   schedule:
-    - cron: "0 11 * * *"   # 11:00 UTC = 08:00 BRT (painel pronto antes das 10h)
+    - cron: "0 8 * * *"    # 08:00 UTC = 05:00 BRT. Cedo de proposito: o cron do
+                            # GitHub atrasa horas sob carga; folga ate o painel das 10h.
   workflow_dispatch: {}      # permite rodar manualmente pelo botao do GitHub
 
 permissions:

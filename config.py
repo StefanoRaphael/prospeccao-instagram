@@ -33,6 +33,11 @@ NOTA_CORTE = 7                  # leads com nota >= entram no painel
 # Quantos candidatos buscar por nicho por rodada (teto do plano free = 5)
 MAX_POR_NICHO = 5
 
+# Profundidade da busca: quantas paginas por hashtag/query. Mais paginas = mais
+# autores distintos alem dos top posts, evita o poco secar pelo dedup. Nao
+# aumenta custo (cobranca e por perfil analisado, limitada por MAX_POR_NICHO).
+PAGINAS_BUSCA = 10
+
 # Trava geografica: so qualifica quem cita a regiao na bio ou nos posts.
 # O modo hashtag e cego para localizacao, entao filtramos por estes termos.
 REGIAO_TOKENS = [

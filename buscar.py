@@ -13,7 +13,7 @@ def buscar_nicho(nome, nicho, ja_vistos):
         "operationMode": "keywordDiscovery",
         "searchHashtags": nicho["hashtags"],
         "searchQueries": nicho["queries"],
-        "maxSearchPagesPerQuery": 5,
+        "maxSearchPagesPerQuery": config.PAGINAS_BUSCA,
         "maxCountDiscovery": config.MAX_POR_NICHO,
         "minFollowers": config.MIN_SEGUIDORES,
         "maxFollowers": config.MAX_SEGUIDORES,
@@ -29,9 +29,9 @@ def buscar_nicho(nome, nicho, ja_vistos):
     }
     resp = requests.post(
         url,
-        params={"token": config.APIFY_TOKEN, "timeout": 120, "memory": 512},
+        params={"token": config.APIFY_TOKEN, "timeout": 240, "memory": 512},
         json=payload,
-        timeout=180,
+        timeout=300,
     )
     resp.raise_for_status()
     itens = resp.json()
