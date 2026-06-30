@@ -39,6 +39,37 @@ def buscar_nicho(nome, nicho, ja_vistos):
     return itens
 
 
+def buscar_localizacao(ja_vistos):
+    """Segunda rede: perfis da regiao por geolocalizacao (independe de hashtag).
+    No plano free traz ate 5 perfis aleatorios da regiao por rodada."""
+    url = API.format(actor=config.APIFY_ACTOR)
+    payload = {
+        "operationMode": "locationDiscovery",
+        "locationSeeds": ["São José dos Campos, Brazil", "Taubaté, Brazil"],
+        "maxCountLocation": config.MAX_POR_NICHO,
+        "minFollowers": config.MIN_SEGUIDORES,
+        "maxFollowers": config.MAX_SEGUIDORES,
+        "accountType": "business",
+        "analyzeQuality": True,
+        "extractEmail": True,
+        "extractPhoneNumber": True,
+        "extractWebsiteUrl": True,
+        "extractBusinessCategory": True,
+        "extractPosts": True,
+        "excludeAccounts": ja_vistos,
+    }
+    resp = requests.post(
+        url,
+        params={"token": config.APIFY_TOKEN, "timeout": 240, "memory": 512},
+        json=payload,
+        timeout=300,
+    )
+    resp.raise_for_status()
+    itens = resp.json()
+    print(f"  [geolocalizacao] {len(itens)} perfis retornados")
+    return itens
+
+
 def handle_de(item):
     """Extrai o @ a partir do campo Account (URL do perfil)."""
     conta = item.get("Account", "") or ""

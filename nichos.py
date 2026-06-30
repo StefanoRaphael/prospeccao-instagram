@@ -3,6 +3,30 @@ Cada nicho define hashtags e termos de busca usados pelo modo keywordDiscovery.
 Regiao alvo: Taubate, SJC, Tremembe, Pindamonhangaba, Santo Antonio do Pinhal,
 Campos do Jordao e demais cidades do Vale do Paraiba."""
 
+# Termos para classificar um perfil achado por geolocalizacao (bio/posts) em um nicho.
+TERMOS_NICHO = {
+    "nutrologia": ["nutrolog", "nutri", "emagrec", "medicina integrativa",
+                   "longevidade", "metabol", "endocrin"],
+    "estetica": ["estetic", "estética", "harmoniza", "botox", "preench",
+                 "cirurgia plast", "cirurgiao plast", "dermato", "biomedic",
+                 "nanopigment", "lipo", "rejuvenesc"],
+    "arquitetura": ["arquitet", "interiores", "design de interiores",
+                    "reforma", "projeto", "marcenaria", "paisagis"],
+}
+
+
+def classifica_nicho(item):
+    """Dado um perfil (achado por geo), descobre a qual nicho pertence pela bio/posts."""
+    texto = (item.get("Biography", "") or "")
+    for i in range(1, 6):
+        texto += " " + str(item.get(f"Post {i}", "") or "")
+    texto = texto.lower()
+    for nicho, termos in TERMOS_NICHO.items():
+        if any(t in texto for t in termos):
+            return nicho
+    return None
+
+
 NICHOS = {
     "nutrologia": {
         "rotulo": "Nutrologia / Medicina Integrativa",

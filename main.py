@@ -64,6 +64,35 @@ def main():
                 print(f"  + @{h} nota {q['nota']} ({q.get('perna')})")
         resumo[nome] = novos
 
+    # Segunda rede: geolocalizacao (acha quem nao aparece em hashtag).
+    print("Rede geolocalizacao (Vale)")
+    try:
+        itens = buscar.buscar_localizacao(vistos)
+    except Exception as e:
+        print(f"  erro na busca geo: {e}")
+        itens = []
+    geo_novos = 0
+    for it in itens:
+        h = buscar.handle_de(it)
+        if not h or h in vistos:
+            continue
+        vistos.append(h)
+        nicho_det = nichos.classifica_nicho(it)
+        if not nicho_det:
+            print(f"  - @{h} geo, mas fora dos nichos")
+            continue
+        try:
+            q = qualificar.qualificar(it)
+        except Exception as e:
+            print(f"  erro ao qualificar {h}: {e}")
+            continue
+        if q.get("nota", 0) >= config.NOTA_CORTE and q.get("perna") != "DESCARTE":
+            leads.append({"handle": h, "item": it, "q": q,
+                          "nicho": nichos.NICHOS[nicho_det]["rotulo"]})
+            geo_novos += 1
+            print(f"  + @{h} nota {q['nota']} ({nicho_det}, via geo)")
+    resumo["geo"] = geo_novos
+
     _salva(SEEN, vistos)
     _salva(LEADS, leads)
     painel.gerar(leads, resumo)
