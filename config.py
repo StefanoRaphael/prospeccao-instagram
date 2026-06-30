@@ -26,7 +26,7 @@ GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # Filtros de prospeccao (decididos com o Stefano)
 MIN_SEGUIDORES = 1000
-MAX_SEGUIDORES = 8000          # acima disso: ego de seguidor inflado, descarta
+MAX_SEGUIDORES = 25000         # teto ampliado p/ recuperar volume no Vale
 LOCALIZACAO = "Taubaté, São José dos Campos, Tremembé, Pindamonhangaba, Vale do Paraíba"
 NOTA_CORTE = 7                  # leads com nota >= entram no painel
 
