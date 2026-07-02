@@ -32,7 +32,7 @@ NICHOS = {
         "rotulo": "Nutrologia / Medicina Integrativa",
         # Ancoras: leads bons ja encontrados. O Instagram traz contas similares
         # (mesmo nicho, tendem a ser da mesma regiao). Sem hashtag.
-        "ancoras": ["dra.bruna.alfenas"],
+        "ancoras": ["dra.bruna.alfenas", "carolbonani_nutri"],
         "hashtags": [
             "nutrologia", "nutrologo", "nutrologa", "medicinaintegrativa",
             "nutrologosjc", "nutrologiasjc", "nutrologasjc", "medicinaintegrativasjc",
