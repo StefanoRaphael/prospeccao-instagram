@@ -53,7 +53,13 @@ NICHOS = {
         "rotulo": "Clinicas de Estetica / Cirurgia Plastica",
         "ancoras": ["dredgardcoutinhosjc", "vanessagomesclinic",
                     "tarcilataborda_dermato", "posoperatoriosjcampos",
-                    "dramonicafadul"],
+                    "dramonicafadul",
+                    # Anestesiologistas nao sao alvo direto (trabalham por indicacao,
+                    # sem captacao propria de paciente), mas servem de semente de rede:
+                    # o Instagram tende a sugerir outros medicos da mesma orbita
+                    # hospitalar (cirurgioes, dermatos) a partir deles.
+                    "dra.marcelalemes", "anestesiologistas_associados_",
+                    "dranaraderrico"],
         "hashtags": [
             "harmonizacaofacial", "esteticaavancada", "cirurgiaplastica",
             "preenchimento", "botox", "estetica",
