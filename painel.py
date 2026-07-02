@@ -43,6 +43,15 @@ def _tel(item):
     return m if "wa" in url.lower() and len(m) >= 10 else ""
 
 
+def _destaca_pandora26(txt):
+    """Destaca slots PANDORA26 no texto com uma cor diferente."""
+    import re
+    # Substitui (PANDORA26: ...) por uma versão destacada
+    padrao = r'\(PANDORA26: ([^)]*)\)'
+    substituido = re.sub(padrao, r'<mark class="pandora26">(PANDORA26: \1)</mark>', txt)
+    return substituido
+
+
 def _card(lead):
     it = lead["item"]
     q = lead["q"]
@@ -58,10 +67,12 @@ def _card(lead):
     msgs = ""
     for rotulo, chave in [("DM Instagram", "dm_instagram"), ("WhatsApp", "msg_whatsapp"),
                           ("E-mail", "email_corpo")]:
-        txt = html.escape(q.get(chave, "") or "")
+        txt = q.get(chave, "") or ""
+        txt_escaped = html.escape(txt)
+        txt_highlighted = _destaca_pandora26(txt_escaped)
         msgs += f'''<div class="msg"><div class="mh">{rotulo}
           <button class="copy" onclick="cp(this)">copiar</button></div>
-          <pre>{txt}</pre></div>'''
+          <pre>{txt_highlighted}</pre></div>'''
     return f'''
     <div class="card nota{q.get('nota',0)}">
       <div class="top">
