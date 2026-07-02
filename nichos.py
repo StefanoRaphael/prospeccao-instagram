@@ -54,10 +54,11 @@ NICHOS = {
         "ancoras": ["dredgardcoutinhosjc", "vanessagomesclinic",
                     "tarcilataborda_dermato", "posoperatoriosjcampos",
                     "dramonicafadul",
-                    # Anestesiologistas nao sao alvo direto (trabalham por indicacao,
-                    # sem captacao propria de paciente), mas servem de semente de rede:
-                    # o Instagram tende a sugerir outros medicos da mesma orbita
-                    # hospitalar (cirurgioes, dermatos) a partir deles.
+                    # Anestesiologistas de Taubate (confirmado pelo Stefano, conhece
+                    # pessoalmente). Nao sao alvo direto (trabalham por indicacao,
+                    # sem captacao propria de paciente), mas servem de semente de rede
+                    # regional confirmada: o Instagram tende a sugerir outros medicos
+                    # da mesma orbita hospitalar (cirurgioes, dermatos) a partir deles.
                     "dra.marcelalemes", "anestesiologistas_associados_",
                     "dranaraderrico"],
         "hashtags": [
