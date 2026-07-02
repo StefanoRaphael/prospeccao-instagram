@@ -54,6 +54,9 @@ def main():
             if not buscar.e_da_regiao(it):
                 print(f"  - @{h} fora da regiao (sem mencao a Taubate/Vale)")
                 continue
+            if not buscar.e_relevante(it):
+                print(f"  - @{h} fora do ramo (sem sinal de saude/estetica/arquitetura)")
+                continue
             try:
                 q = qualificar.qualificar(it)
             except Exception as e:

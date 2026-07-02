@@ -109,6 +109,16 @@ def handle_de(item):
     return conta.rstrip("/").split("/")[-1].lower()
 
 
+def e_relevante(item):
+    """True se o perfil tem sinal de saude/estetica/arquitetura (corta piscina,
+    biscoitaria e outros ramos que a expansao de rede traz por engano)."""
+    texto = (item.get("Biography", "") or "") + " " + (item.get("Full Name", "") or "")
+    for i in range(1, 4):
+        texto += " " + str(item.get(f"Post {i}", "") or "")
+    texto = texto.lower()
+    return any(tok in texto for tok in config.RELEVANCIA_TOKENS)
+
+
 def e_da_regiao(item):
     """True se a bio ou os posts citam algum termo da regiao de Taubate."""
     texto = (item.get("Biography", "") or "")

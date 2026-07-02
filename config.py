@@ -38,6 +38,17 @@ MAX_POR_NICHO = 5
 # aumenta custo (cobranca e por perfil analisado, limitada por MAX_POR_NICHO).
 PAGINAS_BUSCA = 10
 
+# Filtro de relevancia: a expansao de rede as vezes traz conta de outro ramo
+# (piscina, biscoitaria). So vira lead quem tem sinal de saude/estetica/arquitetura
+# na bio, nome ou posts. Corta o joio antes de gastar qualificacao.
+RELEVANCIA_TOKENS = [
+    "medic", "médic", "dra", "dr.", "clinic", "clínic", "consultorio", "consultório",
+    "saude", "saúde", "estetic", "estétic", "dermat", "gineco", "nutri", "nutrolog",
+    "endocrin", "cirurg", "harmoniz", "botox", "preench", "odonto", "fisio",
+    "biomedic", "spa", "longevidade", "emagrec", "crm", "crn", "crefito", "rqe",
+    "arquitet", "interiores", "design de interior", "paisagis", "marcenaria",
+]
+
 # Trava geografica: so qualifica quem cita a regiao na bio ou nos posts.
 # O modo hashtag e cego para localizacao, entao filtramos por estes termos.
 REGIAO_TOKENS = [
