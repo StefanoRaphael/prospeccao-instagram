@@ -32,7 +32,9 @@ NICHOS = {
         "rotulo": "Nutrologia / Medicina Integrativa",
         # Ancoras: leads bons ja encontrados. O Instagram traz contas similares
         # (mesmo nicho, tendem a ser da mesma regiao). Sem hashtag.
-        "ancoras": ["dra.bruna.alfenas", "carolbonani_nutri"],
+        "ancoras": ["dra.bruna.alfenas", "carolbonani_nutri",
+                    "dra.dripavanitto", "rafabarbosacouto.nutri",
+                    "renatoosorionutricionista"],
         "hashtags": [
             "nutrologia", "nutrologo", "nutrologa", "medicinaintegrativa",
             "nutrologosjc", "nutrologiasjc", "nutrologasjc", "medicinaintegrativasjc",
@@ -49,7 +51,9 @@ NICHOS = {
     },
     "estetica": {
         "rotulo": "Clinicas de Estetica / Cirurgia Plastica",
-        "ancoras": ["dredgardcoutinhosjc", "vanessagomesclinic"],
+        "ancoras": ["dredgardcoutinhosjc", "vanessagomesclinic",
+                    "tarcilataborda_dermato", "posoperatoriosjcampos",
+                    "dramonicafadul"],
         "hashtags": [
             "harmonizacaofacial", "esteticaavancada", "cirurgiaplastica",
             "preenchimento", "botox", "estetica",
