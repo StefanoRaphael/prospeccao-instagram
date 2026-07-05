@@ -50,18 +50,23 @@ def main():
             h = buscar.handle_de(it)
             if not h or h in vistos:
                 continue
-            vistos.append(h)
+            # Descartes por regiao/ramo sao permanentes: nunca vai mudar, marca como visto.
             if not buscar.e_da_regiao(it):
                 print(f"  - @{h} fora da regiao (sem mencao a Taubate/Vale)")
+                vistos.append(h)
                 continue
             if not buscar.e_relevante(it):
                 print(f"  - @{h} fora do ramo (sem sinal de saude/estetica/arquitetura)")
+                vistos.append(h)
                 continue
+            # Falha na qualificacao (ex: rate limit do Groq) NAO marca como visto:
+            # o perfil passou nos filtros e merece ser tentado de novo na proxima rodada.
             try:
                 q = qualificar.qualificar(it)
             except Exception as e:
                 print(f"  erro ao qualificar {h}: {e}")
                 continue
+            vistos.append(h)
             if q.get("nota", 0) >= config.NOTA_CORTE and q.get("perna") != "DESCARTE":
                 leads.append({"handle": h, "item": it, "q": q, "nicho": nicho["rotulo"]})
                 novos += 1
@@ -80,16 +85,17 @@ def main():
         h = buscar.handle_de(it)
         if not h or h in vistos:
             continue
-        vistos.append(h)
         nicho_det = nichos.classifica_nicho(it)
         if not nicho_det:
             print(f"  - @{h} geo, mas fora dos nichos")
+            vistos.append(h)
             continue
         try:
             q = qualificar.qualificar(it)
         except Exception as e:
             print(f"  erro ao qualificar {h}: {e}")
             continue
+        vistos.append(h)
         if q.get("nota", 0) >= config.NOTA_CORTE and q.get("perna") != "DESCARTE":
             leads.append({"handle": h, "item": it, "q": q,
                           "nicho": nichos.NICHOS[nicho_det]["rotulo"]})

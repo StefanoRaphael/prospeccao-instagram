@@ -18,8 +18,13 @@ _carrega_env_local()
 APIFY_TOKEN = os.environ.get("APIFY_TOKEN", "")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 
-# Actor de descoberta + enriquecimento de perfis do Instagram
-APIFY_ACTOR = "afanasenko~instagram-profile-scraper"
+# Actor antigo (cota promocional de 15 execucoes gratis/mes, estourada em jul/2026).
+# Mantido comentado so como referencia historica.
+# APIFY_ACTOR = "afanasenko~instagram-profile-scraper"
+
+# Actors oficiais da Apify (sem cota promocional, cobranca normal ~US$0,0027/perfil)
+APIFY_ACTOR_SEARCH = "apify~instagram-search-scraper"
+APIFY_ACTOR_PROFILE = "apify~instagram-profile-scraper"
 
 # Modelo Groq usado na qualificacao
 GROQ_MODEL = "llama-3.3-70b-versatile"
