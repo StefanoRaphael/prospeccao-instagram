@@ -79,6 +79,7 @@ def _card(lead):
         <div>
           <a class="user" href="https://instagram.com/{handle}" target="_blank">@{handle}</a>
           <div class="nome">{html.escape(str(it.get('Full Name','')))}</div>
+          <div class="data-entrada">entrou em {lead.get('data_entrada','?')}</div>
         </div>
         <div class="nota">{q.get('nota','?')}<span>/10</span></div>
       </div>
@@ -112,6 +113,7 @@ def gerar(leads, resumo):
  .top{{display:flex;justify-content:space-between;align-items:flex-start}}
  .user{{color:#8ab4f8;font-weight:600;font-size:16px;text-decoration:none}}
  .nome{{color:#9aa0a6;font-size:13px;margin-top:2px}}
+ .data-entrada{{color:#6b7075;font-size:11px;margin-top:2px}}
  .nota{{font-size:26px;font-weight:700;color:#34a853}} .nota span{{font-size:13px;color:#9aa0a6}}
  .met{{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;font-size:12px;color:#bdc1c6}}
  .met span{{background:#23272c;padding:3px 8px;border-radius:6px}} .perna{{background:#3c2f1a !important;color:#f7c873}}

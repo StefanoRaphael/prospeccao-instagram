@@ -3,6 +3,7 @@ Mantem estado (seen.json) para nao repetir leads entre rodadas (dedup)."""
 import json
 import os
 import sys
+from datetime import datetime, timedelta, timezone
 
 import config
 import nichos
@@ -13,6 +14,7 @@ import painel
 ESTADO = os.path.join(os.path.dirname(__file__), "estado")
 SEEN = os.path.join(ESTADO, "seen.json")
 LEADS = os.path.join(ESTADO, "leads.json")
+BR = timezone(timedelta(hours=-3))
 
 
 def _carrega(caminho, padrao):
@@ -68,7 +70,8 @@ def main():
                 continue
             vistos.append(h)
             if q.get("nota", 0) >= config.NOTA_CORTE and q.get("perna") != "DESCARTE":
-                leads.append({"handle": h, "item": it, "q": q, "nicho": nicho["rotulo"]})
+                leads.append({"handle": h, "item": it, "q": q, "nicho": nicho["rotulo"],
+                              "data_entrada": datetime.now(BR).strftime("%Y-%m-%d")})
                 novos += 1
                 print(f"  + @{h} nota {q['nota']} ({q.get('perna')})")
         resumo[nome] = novos
@@ -98,7 +101,8 @@ def main():
         vistos.append(h)
         if q.get("nota", 0) >= config.NOTA_CORTE and q.get("perna") != "DESCARTE":
             leads.append({"handle": h, "item": it, "q": q,
-                          "nicho": nichos.NICHOS[nicho_det]["rotulo"]})
+                          "nicho": nichos.NICHOS[nicho_det]["rotulo"],
+                          "data_entrada": datetime.now(BR).strftime("%Y-%m-%d")})
             geo_novos += 1
             print(f"  + @{h} nota {q['nota']} ({nicho_det}, via geo)")
     resumo["geo"] = geo_novos
