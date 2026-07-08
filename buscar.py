@@ -81,7 +81,7 @@ def buscar_por_keyword(nome, queries, ja_vistos):
     agrega, dedup e filtra por seguidores."""
     encontrados = {}
     for query in queries:
-        payload = {"search": query, "searchType": "user", "searchLimit": 10}
+        payload = {"search": query, "searchType": "user", "searchLimit": config.SEARCH_LIMIT}
         try:
             perfis = _chama_actor(config.APIFY_ACTOR_SEARCH, payload)
         except requests.HTTPError as e:

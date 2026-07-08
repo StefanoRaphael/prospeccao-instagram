@@ -1,11 +1,51 @@
-"""Camada 2 — Qualificacao. A IA (Groq) aplica a rubrica do Stefano, da nota,
+"""Camada 2 — Qualificacao. A IA aplica a rubrica do Stefano, da nota,
 diagnostica o gap, aponta a perna da escada de valor e escreve a abordagem
-multicanal (DM, WhatsApp, e-mail). Carrega copies fixas (Parte 2) quando disponíveis."""
+multicanal (DM, WhatsApp, e-mail). Provedor (Cerebras/Groq) definido em config.
+Carrega copies fixas (Parte 2) quando disponíveis."""
 import json
 import re
+import requests
 from groq import Groq
 import config
 from outreach_copies import COPIES_RODADA_02_07_2026
+
+CEREBRAS_URL = "https://api.cerebras.ai/v1/chat/completions"
+
+
+def _chamar_llm(prompt):
+    """Chama o provedor de IA configurado e devolve o texto da resposta.
+    Cerebras via endpoint compativel com OpenAI; Groq via SDK (reserva)."""
+    if config.PROVIDER == "cerebras":
+        corpo = {
+            "model": config.CEREBRAS_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.4,
+            "max_tokens": 4000,
+            "response_format": {"type": "json_object"},
+        }
+        # gpt-oss e modelo de raciocinio: sem esforco baixo, o raciocinio consome
+        # o orcamento de tokens e corta o JSON no meio. Nao enviar para modelos
+        # que nao sao de raciocinio (gemma etc.), que rejeitariam o parametro.
+        if config.CEREBRAS_MODEL.startswith("gpt-oss"):
+            corpo["reasoning_effort"] = "low"
+        resp = requests.post(
+            CEREBRAS_URL,
+            headers={"Authorization": f"Bearer {config.CEREBRAS_API_KEY}",
+                     "Content-Type": "application/json"},
+            json=corpo,
+            timeout=120,
+        )
+        resp.raise_for_status()
+        return resp.json()["choices"][0]["message"]["content"]
+
+    client = Groq(api_key=config.GROQ_API_KEY)
+    resp = client.chat.completions.create(
+        model=config.GROQ_MODEL,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.4,
+        response_format={"type": "json_object"},
+    )
+    return resp.choices[0].message.content
 
 ESCADA = """
 ESCADA DE VALOR DO STEFANO (use para indicar o proximo passo):
@@ -265,17 +305,10 @@ def qualificar(item):
             "email_corpo": copia_fixa.get("email_corpo", ""),
         }
 
-    # Sem copy fixa: gera via Groq seguindo as regras permanentes (Parte 1)
-    client = Groq(api_key=config.GROQ_API_KEY)
+    # Sem copy fixa: gera via IA (provedor em config) seguindo as regras (Parte 1)
     prompt = (f"{RUBRICA}\n{ESCADA}\n{TOM}\n{REGRAS_CANAL}\n{REGRA_PERNA_SOLO}\n{SCHEMA}"
               f"\n\nLEAD:\n{_resumo_lead(item)}")
-    resp = client.chat.completions.create(
-        model=config.GROQ_MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.4,
-        response_format={"type": "json_object"},
-    )
-    texto = resp.choices[0].message.content
+    texto = _chamar_llm(prompt)
     try:
         resultado = json.loads(texto)
     except json.JSONDecodeError:

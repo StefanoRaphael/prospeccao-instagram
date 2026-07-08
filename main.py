@@ -31,8 +31,9 @@ def _salva(caminho, dado):
 
 
 def main():
-    if not config.APIFY_TOKEN or not config.GROQ_API_KEY:
-        sys.exit("Faltam APIFY_TOKEN ou GROQ_API_KEY no ambiente.")
+    chave_ia = config.CEREBRAS_API_KEY if config.PROVIDER == "cerebras" else config.GROQ_API_KEY
+    if not config.APIFY_TOKEN or not chave_ia:
+        sys.exit(f"Falta APIFY_TOKEN ou a chave do provedor '{config.PROVIDER}' no ambiente.")
 
     vistos = _carrega(SEEN, [])
     leads = _carrega(LEADS, [])
@@ -40,11 +41,15 @@ def main():
 
     for nome, nicho in nichos.NICHOS.items():
         print(f"Nicho: {nome}")
-        # Motor principal: contas similares as ancoras (sem hashtag).
+        # Motor principal: busca por query de nicho (ja embute cidade, direcionada
+        # e barata). Expansao de rede so se ligada (cara e rende pouco, ver config).
         try:
-            itens = buscar.buscar_similar(nome, nicho.get("ancoras", []), vistos)
+            if config.USAR_EXPANSAO_REDE:
+                itens = buscar.buscar_similar(nome, nicho.get("ancoras", []), vistos)
+            else:
+                itens = buscar.buscar_por_keyword(nome, nicho.get("queries", []), vistos)
         except Exception as e:
-            print(f"  erro na busca similar: {e}")
+            print(f"  erro na busca do nicho: {e}")
             resumo[nome] = 0
             continue
         novos = 0
@@ -76,13 +81,17 @@ def main():
                 print(f"  + @{h} nota {q['nota']} ({q.get('perna')})")
         resumo[nome] = novos
 
-    # Segunda rede: geolocalizacao (acha quem nao aparece em hashtag).
-    print("Rede geolocalizacao (Vale)")
-    try:
-        itens = buscar.buscar_localizacao(vistos)
-    except Exception as e:
-        print(f"  erro na busca geo: {e}")
-        itens = []
+    # Segunda rede: geolocalizacao generica (so por nome de cidade). Desligada
+    # por padrao (traz muito lixo de outro ramo); as queries de nicho ja cobrem
+    # a regiao. Liga em config.USAR_GEO_GENERICA se quiser o reforco.
+    itens = []
+    if config.USAR_GEO_GENERICA:
+        print("Rede geolocalizacao (Vale)")
+        try:
+            itens = buscar.buscar_localizacao(vistos)
+        except Exception as e:
+            print(f"  erro na busca geo: {e}")
+            itens = []
     geo_novos = 0
     for it in itens:
         h = buscar.handle_de(it)

@@ -17,6 +17,7 @@ _carrega_env_local()
 
 APIFY_TOKEN = os.environ.get("APIFY_TOKEN", "")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+CEREBRAS_API_KEY = os.environ.get("CEREBRAS_API_KEY", "")
 
 # Actor antigo (cota promocional de 15 execucoes gratis/mes, estourada em jul/2026).
 # Mantido comentado so como referencia historica.
@@ -26,7 +27,11 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 APIFY_ACTOR_SEARCH = "apify~instagram-search-scraper"
 APIFY_ACTOR_PROFILE = "apify~instagram-profile-scraper"
 
-# Modelo Groq usado na qualificacao
+# Provedor de IA para qualificacao. "cerebras" tem teto de 1 milhao de tokens/dia
+# (10x o Groq); "groq" fica de reserva. Troca aqui em uma linha. Mesmo modelo
+# (Llama 3.3 70B) nos dois, so muda o provedor, entao a qualidade nao muda.
+PROVIDER = "cerebras"
+CEREBRAS_MODEL = "gpt-oss-120b"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # Filtros de prospeccao (decididos com o Stefano)
@@ -37,6 +42,23 @@ NOTA_CORTE = 7                  # leads com nota >= entram no painel
 
 # Quantos candidatos buscar por nicho por rodada (teto do plano free = 5)
 MAX_POR_NICHO = 5
+
+# --- Motores de descoberta (controle de custo da Apify) ---
+# Expansao de rede (relatedProfiles das ancoras) e cara e rende pouco: analisa
+# dezenas de perfis por rodada e o Instagram sugere contas famosas de fora da
+# regiao, quase tudo cortado pelo filtro. Desligada por padrao. Reativa com True.
+USAR_EXPANSAO_REDE = False
+
+# Geo generica (busca so por nome de cidade) traz muito lixo de outro ramo
+# (loja de celular, salao). As queries de nicho ja embutem a cidade e sao mais
+# direcionadas, entao a geo generica fica desligada por padrao.
+USAR_GEO_GENERICA = False
+
+# Resultados por query na busca por keyword. O custo da rodada e proporcional a
+# (numero de queries dos nichos) x SEARCH_LIMIT x US$0,0027 por perfil. Menor =
+# mais barato, cobre menos. Ajustar junto com a frequencia do cron para caber no
+# teto de US$5/mes do plano free da Apify.
+SEARCH_LIMIT = 5
 
 # Profundidade da busca: quantas paginas por hashtag/query. Mais paginas = mais
 # autores distintos alem dos top posts, evita o poco secar pelo dedup. Nao
