@@ -1,5 +1,7 @@
 """Nichos ativos da prospeccao. Para escalar, basta adicionar um bloco novo.
-Cada nicho define hashtags e termos de busca usados pelo modo keywordDiscovery.
+Cada nicho define ancoras (expansao de rede) e queries de busca por keyword.
+Hashtag foi removido do pipeline: trazia contas genericas fora de nicho/regiao,
+sem valor real.
 Regiao alvo: Taubate, SJC, Tremembe, Pindamonhangaba, Santo Antonio do Pinhal,
 Campos do Jordao e demais cidades do Vale do Paraiba."""
 
@@ -35,12 +37,6 @@ NICHOS = {
         "ancoras": ["dra.bruna.alfenas", "carolbonani_nutri",
                     "dra.dripavanitto", "rafabarbosacouto.nutri",
                     "renatoosorionutricionista"],
-        "hashtags": [
-            "nutrologia", "nutrologo", "nutrologa", "medicinaintegrativa",
-            "nutrologosjc", "nutrologiasjc", "nutrologasjc", "medicinaintegrativasjc",
-            "nutrologiataubate", "nutrologotaubate",
-            "saojosedoscampos", "sjc", "valedoparaiba", "camposdojordao",
-        ],
         "queries": [
             "nutrologo sao jose dos campos", "nutrologia sjc",
             "medicina integrativa sao jose dos campos", "nutrologa sjc",
@@ -61,12 +57,6 @@ NICHOS = {
                     # da mesma orbita hospitalar (cirurgioes, dermatos) a partir deles.
                     "dra.marcelalemes", "anestesiologistas_associados_",
                     "dranaraderrico"],
-        "hashtags": [
-            "harmonizacaofacial", "esteticaavancada", "cirurgiaplastica",
-            "preenchimento", "botox", "estetica",
-            "esteticasjc", "esteticataubate", "harmonizacaofacialsjc",
-            "cirurgiaplasticasjc", "saojosedoscampos", "valedoparaiba",
-        ],
         "queries": [
             "clinica de estetica sao jose dos campos", "clinica de estetica taubate",
             "cirurgiao plastico sao jose dos campos", "cirurgiao plastico taubate",
@@ -78,12 +68,6 @@ NICHOS = {
     "arquitetura": {
         "rotulo": "Arquitetura e Design de Interiores",
         "ancoras": [],   # sem lead-ancora ainda; entra pela geolocalizacao
-        "hashtags": [
-            "arquitetura", "designdeinteriores", "interiores",
-            "projetodeinteriores", "arquiteturadeinteriores",
-            "arquiteturasjc", "arquiteturataubate", "designdeinterioressjc",
-            "saojosedoscampos", "valedoparaiba", "camposdojordao",
-        ],
         "queries": [
             "arquiteto sao jose dos campos", "arquiteto taubate",
             "design de interiores sjc", "design de interiores vale do paraiba",
