@@ -3,6 +3,7 @@ Mantem estado (seen.json) para nao repetir leads entre rodadas (dedup)."""
 import json
 import os
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 
 import config
@@ -73,6 +74,7 @@ def main():
             except Exception as e:
                 print(f"  erro ao qualificar {h}: {e}")
                 continue
+            time.sleep(0.3)  # delay entre qualificacoes para nao bater rate limit do Cerebras
             vistos.append(h)
             if q.get("nota", 0) >= config.NOTA_CORTE and q.get("perna") != "DESCARTE":
                 leads.append({"handle": h, "item": it, "q": q, "nicho": nicho["rotulo"],
@@ -107,6 +109,7 @@ def main():
         except Exception as e:
             print(f"  erro ao qualificar {h}: {e}")
             continue
+        time.sleep(0.3)  # delay entre qualificacoes para nao bater rate limit do Cerebras
         vistos.append(h)
         if q.get("nota", 0) >= config.NOTA_CORTE and q.get("perna") != "DESCARTE":
             leads.append({"handle": h, "item": it, "q": q,
